@@ -15,8 +15,23 @@ Of course, for my use case, syncing is necessary.
 But I wanted to see what the performance differences were.
 
 ###Benchmark results###
-n
+####1.5####
 ```
+$ go version go1.5 linux/amd64
+$ go test -bench=.
+testing: warning: no tests to run
+PASS
+BenchmarkMmapSync-8       	       1	28801027383 ns/op
+BenchmarkMmapNoSync-8     	2000000000	         0.17 ns/op
+BenchmarkFileWriteSync-8  	       1	186586517215 ns/op
+BenchmarkFileWriteNoSync-8	       1	157913265794 ns/op
+ok  	github.com/gnewton/goseqbench	378.379s
+$
+```
+
+####1.4####
+```
+$ go version go1.4.2 linux/amd64
 $ go test -bench=.
 testing: warning: no tests to run
 PASS
@@ -31,7 +46,7 @@ $
 
 Clearly mmap-no-sync is hugely fast, but not useful for me.
 
-mmap-sync versus filewrite-sync is an order of magnatude difference.
-
+mmap-sync versus filewrite-sync is an order of magnatude different.
+With go 1.5, writing to file is about 140% faster, both sync and no sync, than go 1.4.
 Unless I made some mistake here, it looks like mmap is the way to go!
 
